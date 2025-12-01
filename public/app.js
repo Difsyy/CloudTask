@@ -19,16 +19,15 @@ async function api(path, options = {}) {
     throw new Error(msg);
   }
 
-  // 204 = no content
   if (res.status === 204) return null;
   return res.json();
 }
 
-function render(todos) {
+function render(items) {
   todoList.innerHTML = "";
-  countEl.textContent = `${todos.length} item${todos.length !== 1 ? "s" : ""}`;
+  countEl.textContent = `${items.length} item${items.length !== 1 ? "s" : ""}`;
 
-  for (const t of todos) {
+  for (const t of items) {
     const li = document.createElement("li");
     li.className = "item";
 
@@ -40,8 +39,8 @@ function render(todos) {
     badge.textContent = t.done ? "DONE" : "TODO";
 
     const text = document.createElement("span");
+    text.className = "text" + (t.done ? " done" : "");
     text.textContent = t.text;
-    if (t.done) text.classList.add("done");
 
     left.appendChild(badge);
     left.appendChild(text);
@@ -74,8 +73,8 @@ function render(todos) {
 }
 
 async function load() {
-  const todos = await api("/api/todos");
-  render(todos);
+  const items = await api("/api/todos");
+  render(items);
 }
 
 todoForm.addEventListener("submit", async (e) => {
@@ -94,6 +93,6 @@ todoForm.addEventListener("submit", async (e) => {
 
 refreshBtn.addEventListener("click", load);
 
-load().catch(err => {
+load().catch((err) => {
   todoList.innerHTML = `<li class="item"><span>❌ ${err.message}</span></li>`;
 });

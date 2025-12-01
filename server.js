@@ -4,6 +4,9 @@ const path = require("path");
 const app = express();
 app.use(express.json());
 
+// Healthcheck for Railway
+app.get("/health", (req, res) => res.status(200).send("ok"));
+
 // ---- In-memory "database" (simple for assignment) ----
 // NOTE: Data resets if the service restarts.
 let todos = [
@@ -29,7 +32,7 @@ app.post("/api/todos", (req, res) => {
 
 app.patch("/api/todos/:id/toggle", (req, res) => {
   const id = Number(req.params.id);
-  const item = todos.find(t => t.id === id);
+  const item = todos.find((t) => t.id === id);
   if (!item) return res.status(404).json({ error: "not found" });
 
   item.done = !item.done;
@@ -39,7 +42,7 @@ app.patch("/api/todos/:id/toggle", (req, res) => {
 app.delete("/api/todos/:id", (req, res) => {
   const id = Number(req.params.id);
   const before = todos.length;
-  todos = todos.filter(t => t.id !== id);
+  todos = todos.filter((t) => t.id !== id);
   if (todos.length === before) return res.status(404).json({ error: "not found" });
 
   res.status(204).send();
@@ -48,7 +51,9 @@ app.delete("/api/todos/:id", (req, res) => {
 // ---- Serve frontend ----
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("*", (req, res) => {
+// SPA fallback (don’t override /api routes)
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith("/api")) return next();
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
