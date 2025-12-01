@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Railway To-Do</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>To-Do app from group 04</h1>
+      <p class="sub">Mulailah dengan bismillah</p>
+    </header>
+
+    <form id="todoForm" class="row">
+      <input id="todoInput" placeholder="Add a task…" autocomplete="off" />
+      <button type="submit">Add</button>
+    </form>
+
+    <section class="listWrap">
+      <div class="meta">
+        <span id="count">0 items</span>
+        <button id="refreshBtn" class="ghost" type="button">Refresh</button>
+      </div>
+      <ul id="todoList" class="list"></ul>
+    </section>
+
+    <footer>
+      <small>Try: add, toggle, delete </small>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
